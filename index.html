@@ -63,8 +63,11 @@ button:focus-visible,select:focus-visible{outline:3px solid var(--yel);outline-o
 #gauge{position:absolute;left:12px;right:12px;max-width:640px;margin:0 auto;top:calc(env(safe-area-inset-top,0px) + 66px);height:24px;border-radius:12px;background:rgba(28,18,16,.8);pointer-events:none;padding:4px 4px 4px 58px}
 #gauge .in{position:relative;width:100%;height:100%;border-radius:8px;background:rgba(255,255,255,.14)}
 #gFill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--yel),#ff7a1a);border-radius:8px}
+#gGuide{position:absolute;top:-6px;bottom:-6px;width:6px;margin-left:-3px;background:#3fbf5a;box-shadow:0 0 0 1.5px var(--ink);display:none;animation:gpulse 1s ease-in-out infinite}
+#gGuide::after{content:attr(data-l);position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:11px;font-weight:900;color:#fff;background:#1d7a33;border-radius:6px;padding:1px 6px;white-space:nowrap;margin-top:3px}
+@keyframes gpulse{50%{opacity:.45}}
 #gPrev{position:absolute;top:-5px;bottom:-5px;width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 0 1.5px var(--ink);display:none}
-#gPrev::after{content:attr(data-l);position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:10px;font-weight:900;color:#fff;white-space:nowrap;text-shadow:0 1px 2px #000;margin-top:2px}
+#gPrev::after{content:attr(data-l);position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:10px;font-weight:900;color:#fff;background:rgba(28,18,16,.85);border-radius:6px;padding:1px 6px;white-space:nowrap;margin-top:3px}
 #gauge small{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:900;color:#fff;white-space:nowrap}
 #picker{position:absolute;left:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;gap:10px}
 .pk{width:78px;height:78px;border-radius:50%;border:4px solid rgba(28,18,16,.9);font-family:var(--disp);font-size:36px;cursor:pointer;box-shadow:0 5px 0 rgba(28,18,16,.9);display:grid;place-items:center;line-height:1;padding:0}
@@ -72,7 +75,7 @@ button:focus-visible,select:focus-visible{outline:3px solid var(--yel);outline-o
 #pkO{background:var(--choco);color:#fff}
 #pkR{background:var(--cream);color:var(--ink)}
 .pk[aria-pressed="true"]{outline:4px solid var(--yel);outline-offset:2px;transform:translateY(-3px)}
-#hint{position:absolute;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 30px);background:rgba(28,18,16,.9);color:var(--cream);font-weight:900;font-size:14px;padding:9px 14px;border-radius:999px;border:2px solid var(--yel);pointer-events:none;max-width:calc(100% - 210px);text-align:center;line-height:1.3}
+#hint{position:absolute;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 30px);background:rgba(28,18,16,.9);color:var(--cream);font-weight:900;font-size:13px;padding:9px 12px;border-radius:999px;border:2px solid var(--yel);pointer-events:none;max-width:calc(100% - 200px);text-align:center;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #msg{position:absolute;left:0;right:0;top:34%;text-align:center;pointer-events:none;padding:0 16px}
 #msgBig{font-family:var(--disp);font-size:clamp(40px,13vw,68px);line-height:1.05;color:#fff;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:0 4px 0 var(--ink)}
 #msgBig.bad{color:#ff8a6a}
@@ -156,7 +159,7 @@ button:focus-visible,select:focus-visible{outline:3px solid var(--yel);outline-o
     <button class="chip" id="endBtn" data-i="end">おわる</button>
   </div>
   <div id="word" hidden></div>
-  <div id="gauge" hidden><div class="in"><div id="gFill"></div><div id="gPrev"></div></div><small data-i="power">ちから</small></div>
+  <div id="gauge" hidden><div class="in"><div id="gFill"></div><div id="gPrev"></div><div id="gGuide"></div></div><small data-i="power">ちから</small></div>
   <div id="picker" hidden>
     <button class="pk" id="pkO" aria-pressed="true" aria-label="オ"><span>オ<small data-i="choco">チョコ</small></span></button>
     <button class="pk" id="pkR" aria-pressed="false" aria-label="レ"><span>レ<small data-i="creamS">クリーム</small></span></button>
@@ -247,7 +250,7 @@ const TX = {
     vt_n: 'ふつう', vt_f: '早口', vt_l: 'ゆっくり重低音', vt_h: '甲高い',
     start: 'あそぶ（音が出ます）', rank: 'ランキング', toTitle: 'タイトルへ',
     outL: 'アウト', stackL: '積んだ数', end: 'おわる', power: 'ちから', choco: 'チョコ', creamS: 'クリーム',
-    prev: '前回', hintAim: '長押しでためて、はなす', hintWait: '…', out: 'アウト！', outN: '{n}こ落ちた',
+    prev: '前回', guide: '目安', hintAim: '長押しでためて、はなす', hintWait: '…', out: 'アウト！', outN: '{n}こ落ちた',
     over: '3アウト', overSub: '読み上げます', endSub: '読み上げます',
     skip: 'とばす ▶▶', readN: '{n}こ', recNow: '録画中',
     resH: 'あなたのオレオ', unit: 'こ', resSub: '自己ベスト {s}こ', newBest: '自己ベスト更新！',
@@ -269,7 +272,7 @@ const TX = {
     vt_n: 'Normal', vt_f: 'Fast', vt_l: 'Slow & deep', vt_h: 'High-pitched',
     start: 'Play (sound on)', rank: 'Ranking', toTitle: 'Title',
     outL: 'Outs', stackL: 'Stacked', end: 'Finish', power: 'Power', choco: 'Choco', creamS: 'Cream',
-    prev: 'Last', hintAim: 'Hold to charge, release', hintWait: '…', out: 'OUT!', outN: '{n} fell',
+    prev: 'Last', guide: 'Try here', hintAim: 'Hold to charge, release', hintWait: '…', out: 'OUT!', outN: '{n} fell',
     over: '3 outs', overSub: 'Reading it out', endSub: 'Reading it out',
     skip: 'Skip ▶▶', readN: '{n} pcs', recNow: 'Recording',
     resH: 'Your cookie stack', unit: 'pcs', resSub: 'Your best {s}', newBest: 'New personal best!',
@@ -291,7 +294,7 @@ const TX = {
     vt_n: '普通', vt_f: '快嘴', vt_l: '慢速低音', vt_h: '尖聲',
     start: '開始玩（會有聲音）', rank: '排行榜', toTitle: '回標題',
     outL: '出局', stackL: '疊的數量', end: '結束', power: '力量', choco: '巧克力', creamS: '奶油',
-    prev: '上次', hintAim: '長按蓄力，放開', hintWait: '…', out: '出局！', outN: '掉了{n}塊',
+    prev: '上次', guide: '參考', hintAim: '長按蓄力，放開', hintWait: '…', out: '出局！', outN: '掉了{n}塊',
     over: '3出局', overSub: '開始朗讀', endSub: '開始朗讀',
     skip: '跳過 ▶▶', readN: '{n}塊', recNow: '錄影中',
     resH: '你的夾心餅', unit: '塊', resSub: '自己最佳 {s}塊', newBest: '刷新自己的最佳紀錄！',
@@ -313,7 +316,7 @@ const TX = {
     vt_n: '보통', vt_f: '빠르게', vt_l: '느린 저음', vt_h: '높은 목소리',
     start: '놀기 (소리가 나요)', rank: '랭킹', toTitle: '타이틀로',
     outL: '아웃', stackL: '쌓은 수', end: '끝내기', power: '힘', choco: '초코', creamS: '크림',
-    prev: '지난번', hintAim: '길게 눌러 모으고, 떼기', hintWait: '…', out: '아웃!', outN: '{n}개 떨어짐',
+    prev: '지난번', guide: '기준', hintAim: '길게 눌러 모으고, 떼기', hintWait: '…', out: '아웃!', outN: '{n}개 떨어짐',
     over: '3아웃', overSub: '읽어 줄게요', endSub: '읽어 줄게요',
     skip: '건너뛰기 ▶▶', readN: '{n}개', recNow: '녹화 중',
     resH: '당신의 쿠키 탑', unit: '개', resSub: '자기 최고 {s}개', newBest: '자기 최고 기록 갱신!',
@@ -442,7 +445,7 @@ sun.shadow.mapSize.set(1024, 1024); Object.assign(sun.shadow.camera, { left: -10
 const PX = 3.0, PY = 1.65, PLATE_W = 1.9;            // 皿の中心xと上面の高さ
 const PVX = -2.2, PVY = .55, BL = 2.8, ALPHA = .17;  // シーソー
 const VX = 2.2;                                      // 横の速さ（いつも同じ）
-const VY0 = 5, VYK = 1.2, HMAX = 12, HRATE = 2.6;    // 縦の速さ = VY0 + VYK×重りの高さ
+const VY0 = 5, VYK = 1.2, HMAX = 12, HRATE = 2.6, GUIDE_H = 5.05; // GUIDE_H：1こ目がだいたい皿のまん中に落ちる強さ    // 縦の速さ = VY0 + VYK×重りの高さ
 const SIZES = { o: { w: 1.0, h: .25 }, r: { w: .9, h: .375 } };
 
 // 床とテーブル
@@ -602,7 +605,7 @@ function clearAll() { for (const p of PIECES) { scene.remove(p.mesh); if (p.body
 
 function startRun() {
   clearAll(); show(null); $('#resP').hidden = true;
-  RUN = { outs: 0, prevH: lsGet('ol_prevH'), freeze: false, endT: 0, flying: null };
+  RUN = { outs: 0, prevH: null, shots: 0, freeze: false, endT: 0, flying: null };
   $('#hud').hidden = false; $('#picker').hidden = false; $('#gauge').hidden = false; $('#word').hidden = false; $('#readBox').hidden = true; $('#skipBtn').hidden = true;
   boardAng = boardTarget = -ALPHA; H = 0; drop = null; updateHUD(); loadPiece(); mode = 'aim'; hint(tr('hintAim'));
   if (window.gtag) gtag('event', 'oreleo_start');
@@ -614,6 +617,7 @@ function updateHUD() {
   $('#hScore').textContent = liveCount();
   $('#hOutB').innerHTML = [0, 1, 2].map(i => `<i class="${i < RUN.outs ? 'on' : ''}">●</i>`).join('');
   const w = toKana(wordNow()); $('#word').textContent = w.length > 60 ? '…' + w.slice(-60) : w;
+  const gd = RUN.shots === 0; $('#gGuide').style.display = gd ? 'block' : 'none'; if (gd) { $('#gGuide').style.left = (GUIDE_H / HMAX * 100) + '%'; $('#gGuide').dataset.l = tr('guide'); }
   const pv = RUN.prevH; $('#gPrev').style.display = pv != null ? 'block' : 'none'; if (pv != null) { $('#gPrev').style.left = (pv / HMAX * 100) + '%'; $('#gPrev').dataset.l = tr('prev'); }
 }
 
@@ -633,7 +637,7 @@ addEventListener('keydown', e => {
 addEventListener('keyup', e => { if ((e.code === 'Space' || e.code === 'Enter') && mode === 'charge') startDrop(); });
 
 function startDrop() {
-  mode = 'drop'; RUN.prevH = H; lsSet('ol_prevH', H); updateHUD();
+  mode = 'drop'; RUN.prevH = H; RUN.shots++; updateHUD();
   drop = { y: H, vy: 0 };
 }
 function launch() {
@@ -676,9 +680,17 @@ function startRead(again) {
   if (HAS_TTS) {
     try {
       speechSynthesis.cancel();
-      const u = makeUtter(toKana(w)); READ.ut = u;
-      u.onstart = begin; u.onend = () => { if (READ && READ.ut === u) { READ.done = true; setTimeout(finishRead, 700); } }; u.onerror = u.onend;
-      speechSynthesis.speak(u); setTimeout(begin, 700);
+      // 長い文は途中で止まる端末があるので、16こずつに分けて続けて読む
+      const CH = 16, R = READ; R.chunks = []; R.ci = -1; R.ct = 0;
+      for (let a = 0; a < n; a += CH) R.chunks.push({ a, b: Math.min(n, a + CH), est: Math.min(CH, n - a) * .16 / t.rate });
+      R.chunks.forEach((c, k) => {
+        const u = makeUtter(toKana(w.slice(c.a, c.b)));
+        u.onstart = () => { if (READ !== R) return; begin(); R.ci = k; R.ct = 0; };
+        u.onend = () => { if (READ !== R) return; if (k === R.chunks.length - 1) { R.done = true; setTimeout(finishRead, 700); } };
+        u.onerror = () => { if (READ !== R || R.done) return; R.done = true; setTimeout(finishRead, 300); };
+        speechSynthesis.speak(u);
+      });
+      setTimeout(begin, 700);
     } catch (_) { begin(); }
   } else { // 読み上げがない端末は、動画用の声で
     loadClips().then(() => { const d = playClipsSeq(w); READ.dur = d || READ.dur; begin(); setTimeout(() => { if (READ && !READ.done) { READ.done = true; setTimeout(finishRead, 600); } }, ((d || READ.dur) + .3) * 1000); });
@@ -686,7 +698,11 @@ function startRead(again) {
 }
 function stepRead(dt) {
   if (!READ || !READ.started) return;
-  READ.t += dt; const n = READ.w.length; let i = READ.done ? n - 1 : Math.min(n - 1, Math.floor(READ.t / Math.max(.1, READ.dur) * n));
+  READ.t += dt; const n = READ.w.length; let i;
+  if (READ.done) i = n - 1;
+  else if (READ.chunks && READ.ci >= 0) { const c = READ.chunks[READ.ci]; READ.ct += dt; i = Math.min(c.b - 1, c.a + Math.floor(READ.ct / Math.max(.05, c.est) * (c.b - c.a))); }
+  else i = Math.min(n - 1, Math.floor(READ.t / Math.max(.1, READ.dur) * n));
+  if (i < 0) i = 0;
   if (READ.t > READ.dur + 4 && !READ.done) { READ.done = true; setTimeout(finishRead, 300); } // 声が終わったと伝わらない端末
   if (i !== READ.i) {
     READ.i = i; const sp = $('#readTxt').children;
@@ -920,8 +936,9 @@ function frame(now) {
   seesaw.rotation.z = boardAng;
   const wy = mode === 'charge' ? H : mode === 'drop' && drop ? drop.y : (drop && drop.y === 0 ? 0 : .15);
   weight.position.set(le.x, le.y + wy, 0); weight.rotation.z = (mode === 'drop' || mode === 'wait') && drop && drop.y === 0 ? boardAng : 0;
-  prevMark.visible = !!(RUN && RUN.prevH != null && (mode === 'aim' || mode === 'charge'));
-  if (prevMark.visible) prevMark.position.set(le.x, boardEnd(-ALPHA, -1).y + RUN.prevH + .35, -.6);
+  const mk = RUN ? (RUN.shots === 0 ? GUIDE_H : RUN.prevH) : null;
+  prevMark.visible = !!(RUN && mk != null && (mode === 'aim' || mode === 'charge'));
+  if (prevMark.visible) { prevMark.position.set(le.x, boardEnd(-ALPHA, -1).y + mk + .35, -.6); prevMark.material.color.setHex(RUN.shots === 0 ? 0x3fbf5a : 0xffd23f); }
   for (const p of PIECES) if (p.st === 'board') placeOnBoard(p);
 
   // 物理
