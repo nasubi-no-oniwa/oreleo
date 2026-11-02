@@ -191,6 +191,7 @@ button:focus-visible,select:focus-visible{outline:3px solid var(--yel);outline-o
       <div class="res-score" id="resS"></div>
       <div class="res-word" id="resW"></div>
       <p class="note" id="resSub"></p>
+      <button class="big alt" id="readAgain" data-i="readAgain">🔊 もう一度読み上げる</button>
       <button class="big rec" id="recBtn" data-i="recBtn">🎬 読み上げ動画をつくる</button>
       <button class="big x" id="resShare" data-i="share">Xに投稿（文だけ）</button>
       <div class="entry"><input id="nameIn" maxlength="12" data-ip="namePh" placeholder="名前（12文字まで）" autocomplete="nickname"><button id="send" data-i="send">登録</button></div>
@@ -250,7 +251,7 @@ const TX = {
     over: '3アウト', overSub: '読み上げます', endSub: '読み上げます',
     skip: 'とばす ▶▶', readN: '{n}こ', recNow: '録画中',
     resH: 'あなたのオレオ', unit: 'こ', resSub: '自己ベスト {s}こ', newBest: '自己ベスト更新！',
-    recBtn: '🎬 読み上げ動画をつくる', share: 'Xに投稿（文だけ）',
+    readAgain: '🔊 もう一度読み上げる', recBtn: '🎬 読み上げ動画をつくる', share: 'Xに投稿（文だけ）',
     namePh: '名前（12文字まで）', send: '登録', needName: '名前を入れてね', badName: 'その名前は使えません',
     sending: '登録中…', sent: '登録しました', notBest: '自己ベストではないので登録しませんでした', sendFail: '登録できませんでした',
     retry: 'もう一回', rLoading: '読みこみ中…', rEmpty: 'まだだれもいません。1位になれる', rFail: 'つながりませんでした',
@@ -272,7 +273,7 @@ const TX = {
     over: '3 outs', overSub: 'Reading it out', endSub: 'Reading it out',
     skip: 'Skip ▶▶', readN: '{n} pcs', recNow: 'Recording',
     resH: 'Your cookie stack', unit: 'pcs', resSub: 'Your best {s}', newBest: 'New personal best!',
-    recBtn: '🎬 Make a read-out video', share: 'Post to X (text only)',
+    readAgain: '🔊 Read it out again', recBtn: '🎬 Make a read-out video', share: 'Post to X (text only)',
     namePh: 'Name (up to 12)', send: 'Submit', needName: 'Enter a name', badName: "That name can't be used",
     sending: 'Submitting…', sent: 'Submitted', notBest: 'Not your best, so it was not submitted', sendFail: "Couldn't submit",
     retry: 'Again', rLoading: 'Loading…', rEmpty: 'Nobody yet. You can be #1', rFail: "Couldn't connect",
@@ -294,7 +295,7 @@ const TX = {
     over: '3出局', overSub: '開始朗讀', endSub: '開始朗讀',
     skip: '跳過 ▶▶', readN: '{n}塊', recNow: '錄影中',
     resH: '你的夾心餅', unit: '塊', resSub: '自己最佳 {s}塊', newBest: '刷新自己的最佳紀錄！',
-    recBtn: '🎬 製作朗讀影片', share: '發到X（只有文字）',
+    readAgain: '🔊 再唸一次', recBtn: '🎬 製作朗讀影片', share: '發到X（只有文字）',
     namePh: '名字（最多12字）', send: '登錄', needName: '請輸入名字', badName: '這個名字不能用',
     sending: '登錄中…', sent: '已登錄', notBest: '不是自己的最佳紀錄，所以沒有登錄', sendFail: '無法登錄',
     retry: '再一次', rLoading: '讀取中…', rEmpty: '還沒有人。你可以拿第1', rFail: '無法連線',
@@ -316,7 +317,7 @@ const TX = {
     over: '3아웃', overSub: '읽어 줄게요', endSub: '읽어 줄게요',
     skip: '건너뛰기 ▶▶', readN: '{n}개', recNow: '녹화 중',
     resH: '당신의 쿠키 탑', unit: '개', resSub: '자기 최고 {s}개', newBest: '자기 최고 기록 갱신!',
-    recBtn: '🎬 읽어 주는 영상 만들기', share: 'X에 올리기 (글만)',
+    readAgain: '🔊 한 번 더 읽어 주기', recBtn: '🎬 읽어 주는 영상 만들기', share: 'X에 올리기 (글만)',
     namePh: '이름(12자까지)', send: '등록', needName: '이름을 넣어 줘', badName: '그 이름은 쓸 수 없어요',
     sending: '등록 중…', sent: '등록했어요', notBest: '자기 최고 기록이 아니라서 등록하지 않았어요', sendFail: '등록하지 못했어요',
     retry: '한 번 더', rLoading: '불러오는 중…', rEmpty: '아직 아무도 없어요. 1등이 될 수 있어', rFail: '연결하지 못했어요',
@@ -540,7 +541,7 @@ engine.gravity.y = 1;
 const W = (x, y) => ({ x: x * S, y: -y * S });
 Composite.add(engine.world, [
   Bodies.rectangle(0, 50, 8000, 100, { isStatic: true, friction: .9, label: 'floor' }),
-  Bodies.rectangle(PX * S, -(PY - .06) * S, PLATE_W * S, 12, { isStatic: true, friction: .95, label: 'plate', chamfer: { radius: 4 } }),
+  Bodies.rectangle(PX * S, -(PY - .4) * S, PLATE_W * S, 80, { isStatic: true, friction: .95, label: 'plate', chamfer: { radius: 4 } }),
   Bodies.rectangle(PX * S, -(PY / 2) * S, 30, (PY - .1) * S, { isStatic: true, friction: .5, label: 'stem' }),
 ]);
 let PIECES = []; // { k, body, mesh, st:'board'|'fly'|'stack'|'out', t, still, rot0 }
@@ -554,11 +555,11 @@ function newBody(k, x, y) {
 }
 Events.on(engine, 'collisionStart', e => {
   for (const p of e.pairs) {
-    const sp = Math.hypot(p.bodyA.velocity.x - p.bodyB.velocity.x, p.bodyA.velocity.y - p.bodyB.velocity.y);
+    const va = Body.getVelocity(p.bodyA), vb = Body.getVelocity(p.bodyB), sp = Math.hypot(va.x - vb.x, va.y - vb.y);
     // 飛んできたクッキーは、当たった瞬間に横の勢いをほとんど失う（積みやすく）
     for (const q of PIECES) if (q.st === 'fly' && !q.hit && (q.body === p.bodyA || q.body === p.bodyB)) {
       const o = q.body === p.bodyA ? p.bodyB : p.bodyA; if (o.label === 'floor') continue;
-      q.hit = true; Body.setVelocity(q.body, { x: q.body.velocity.x * (q.k === 'o' ? .2 : .35), y: q.body.velocity.y * .5 }); Body.setAngularVelocity(q.body, q.body.angularVelocity * .3);
+      q.hit = true; const tsc = q.body.deltaTime / (1000 / 60); Body.setVelocity(q.body, { x: q.body.velocity.x / tsc * (q.k === 'o' ? .2 : .35), y: Math.min(q.body.velocity.y / tsc * .5, 8) }); Body.setAngularVelocity(q.body, q.body.angularVelocity * .3);
     }
     if (sp < 1.2) continue; const pc = PIECES.find(q => q.body === p.bodyA || q.body === p.bodyB); if (pc) SND.land(pc.k, sp);
   }
@@ -658,12 +659,12 @@ function gameOver(byOut) {
 
 /* ===================== 読み上げ ===================== */
 let READ = null;
-function startRead() {
+function startRead(again) {
   RUN.freeze = true; mode = 'read';
   for (const p of PIECES) if (p.st === 'fly') p.st = 'stack';
   const list = stackPieces().filter(p => p.st === 'stack').sort((a, b) => a.body.position.y < b.body.position.y ? 1 : -1);
   const w = list.map(p => p.k).join('');
-  READ = { list, w, i: -1, t: 0, dur: 0, started: false, done: false, ut: null };
+  READ = { list, w, i: -1, t: 0, dur: 0, started: false, done: false, ut: null, again: !!again };
   $('#word').hidden = true; $('#hud').hidden = true;
   $('#readTxt').innerHTML = w ? w.split('').map(c => `<span>${KANA[c]}</span>`).join('') : esc(tr('none'));
   $('#readN').textContent = tr('readN', { n: w.length });
@@ -697,8 +698,9 @@ function finishRead() {
   if (!READ || mode !== 'read') return;
   if (HAS_TTS) speechSynthesis.cancel();
   $('#readBox').hidden = true; $('#skipBtn').hidden = true;
-  showResult(READ.w);
+  if (READ.again) { mode = 'result'; show('#resP'); } else showResult(READ.w);
 }
+$('#readAgain').onclick = () => { if (!LAST || mode !== 'result') return; audioOn(); SND.click(); show(null); startRead(true); };
 $('#skipBtn').onclick = e => { e.stopPropagation(); SND.click(); if (mode === 'read') finishRead(); else if (mode === 'rec') stopRec(true); };
 
 /* ===================== 結果 ===================== */
@@ -711,7 +713,7 @@ function showResult(w) {
   $('#resW').textContent = n ? toKana(w) : tr('none');
   $('#resSub').textContent = nb && n ? tr('newBest') : tr('resSub', { s: Math.max(prev, n) });
   $('#nameIn').value = lsGet('ol_name') || ''; $('#sendMsg').textContent = ''; $('#sendMsg').className = 'note'; $('#send').disabled = !(n >= 1);
-  $('#recBtn').disabled = !n;
+  $('#recBtn').disabled = !n; $('#readAgain').disabled = !n;
   show('#resP'); loadRank($('#rlist'));
   if (window.gtag) gtag('event', 'oreleo_end', { score: n });
 }
@@ -898,7 +900,7 @@ function updateCam(dt) {
 
 /* ===================== まわす ===================== */
 let lastT = performance.now(), acc = 0;
-const STEP = 1000 / 60;
+const STEP = 1000 / 60, SUB = 3;
 function frame(now) {
   const dt = Math.min(.1, (now - lastT) / 1000); lastT = now;
   if (msgT > 0) { msgT -= dt; if (msgT <= 0) $('#msg').hidden = true; }
@@ -925,7 +927,7 @@ function frame(now) {
   // 物理
   if (RUN && !RUN.freeze) {
     acc += dt * 1000; let n = 0;
-    while (acc >= STEP && n < 5) { Engine.update(engine, STEP); acc -= STEP; n++; }
+    while (acc >= STEP && n < 5) { for (let k = 0; k < SUB; k++) Engine.update(engine, STEP / SUB); acc -= STEP; n++; }
     if (n === 5) acc = 0;
     let fellNow = 0, fx = 0, fy = 0;
     for (const p of PIECES) {
@@ -937,7 +939,7 @@ function frame(now) {
         if (low || x < -8 || x > 14) { p.st = 'out'; p.t = 0; fellNow++; fx = x; fy = Math.max(y, PY); continue; }
       }
       if (p.st === 'fly') {
-        p.t += dt; const sp = Math.hypot(b.velocity.x, b.velocity.y) + Math.abs(b.angularVelocity) * 30;
+        p.t += dt; const sp = Body.getSpeed(b) + Math.abs(Body.getAngularVelocity(b)) * 30;
         if (p.t > .4 && sp < .25) p.still += dt; else p.still = 0;
         if (p.still > .35 || p.t > 5) { p.st = 'stack'; }
       }
@@ -985,7 +987,7 @@ titleDeco();
 resize(); applyLang(); camera.position.copy(camT.pos);
 $('#loading').hidden = true;
 requestAnimationFrame(frame);
-if (QS.has('debug')) window.OL = { pieces: () => PIECES, run: () => RUN, mode: () => mode, setH: h => { H = h; }, startDrop, engine, READ: () => READ, startRun, gameOver, LAST: () => LAST };
+if (QS.has('debug')) window.OL = { pieces: () => PIECES, run: () => RUN, mode: () => mode, setH: h => { H = h; }, startDrop, engine, READ: () => READ, startRun, gameOver, LAST: () => LAST, dropAt: (k, x, y) => { const p = { k, mesh: makeCookieMesh(k), st: 'fly', t: 0, still: 0 }; p.body = newBody(k, x, y); Composite.add(engine.world, p.body); scene.add(p.mesh); PIECES.push(p); return p; } };
 </script>
 </body>
 </html>
